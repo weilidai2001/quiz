@@ -1,0 +1,117 @@
+[
+  {
+    "question": "<p>What are the key trade-offs between using the <code>Option</code> type and throwing exceptions for error handling in TypeScript, as discussed in the sources?</p>",
+    "answers": [
+      {
+        "id": "a",
+        "value": "<p><code>Option</code> types provide detailed error information and force explicit handling, while throwing exceptions offers composability and hides error details [1, 2].</p>"
+      },
+      {
+        "id": "b",
+        "value": "<p>Throwing exceptions signals failure without details but is easy to compose, whereas <code>Option</code> types provide specific error information but require manual error propagation [1, 2].</p>"
+      },
+      {
+        "id": "c",
+        "value": "<p><code>Option</code> types signal failure without providing detailed reasons and are good for composing operations, whereas throwing exceptions can offer specific failure details but require manual <code>try/catch</code> blocks that might be skipped by lazy consumers [1-5].</p>"
+      },
+      {
+        "id": "d",
+        "value": "<p>Both <code>Option</code> types and throwing exceptions force explicit error handling, but only <code>Option</code> types allow for detailed error messages [1, 2].</p>"
+      }
+    ],
+    "correctAnswer": "c",
+    "explanation": "<p>The sources indicate that the <b><code>Option</code> type signals failure with a `None` but does not provide more details about what failed and why</b>, making it difficult to debug. However, it <b>shines when chaining operations over possibly errored computations</b> [1]. Conversely, <b>throwing exceptions allows for custom error types to indicate why an operation failed</b>, which can be useful for debugging or providing user feedback [6, 7]. While returning exceptions (a union of success type and error types) forces consumers to handle all cases, <b>throwing exceptions does not inherently force consumers to catch them</b>, as TypeScript does not encode exceptions in a function's signature [4, 5]. This can lead to situations where consumers might inadvertently skip handling expected errors [5]." 
+  },
+  {
+    "question": "<p>Describe the typical process of compiling and running a TypeScript program, highlighting the unique role of the TypeScript Compiler (TSC) and the typechecking step [8-11].</p>",
+    "answers": [
+      {
+        "id": "a",
+        "value": "<p>The program is parsed into an AST, then directly compiled to bytecode, which is then typechecked and evaluated by the JavaScript runtime [8-10].</p>"
+      },
+      {
+        "id": "b",
+        "value": "<p>The TypeScript Compiler (TSC) parses the program into an AST, then <b>typechecks</b> the code <b>before</b> emitting JavaScript code, which is subsequently evaluated by a JavaScript runtime [8-11].</p>"
+      },
+      {
+        "id": "c",
+        "value": "<p>TypeScript code is first converted to an abstract syntax tree (AST), then transpiled to bytecode, and finally, typechecking occurs at runtime by the JavaScript engine [8-10].</p>"
+      },
+      {
+        "id": "d",
+        "value": "<p>TSC first typechecks the program, then converts it to bytecode for direct execution, bypassing JavaScript compilation [8, 9].</p>"
+      }
+    ],
+    "correctAnswer": "b",
+    "explanation": "<p>The sources specify the typical steps for most languages as: 1) Program parsed into an AST, 2) AST compiled to bytecode, 3) Bytecode evaluated by runtime [8]. However, <b>TypeScript is special because instead of compiling straight to bytecode, it compiles to JavaScript code</b> [9]. A <b>crucial step performed by TSC *after* generating an AST but *before* it emits code, is that it typechecks your code</b> [10]. This typechecking is how TypeScript ensures program correctness, and importantly, <b>your program's types will never affect the generated JavaScript output</b>; they are used solely for typechecking [12]. The JavaScript code is then run in a browser or with NodeJS [9]." 
+  },
+  {
+    "question": "<p>What is the primary purpose of a TypeScript type declaration file (<code>.d.ts</code>), and what key characteristic differentiates it from a regular TypeScript (<code>.ts</code>) file in terms of content and compilation?</p>",
+    "answers": [
+      {
+        "id": "a",
+        "value": "<p>A <code>.d.ts</code> file defines both types and values, and is compiled to JavaScript like a regular <code>.ts</code> file, but it explicitly exports only type information [13, 14].</p>"
+      },
+      {
+        "id": "b",
+        "value": "<p>A <code>.d.ts</code> file is exclusively used for writing unit tests for JavaScript libraries, and its content is ignored by the TypeScript compiler [13].</p>"
+      },
+      {
+        "id": "c",
+        "value": "<p>A <code>.d.ts</code> file serves to <b>declare types for JavaScript code without generating any corresponding JavaScript output</b>, using the <code>declare</code> keyword for values that exist elsewhere [13, 14].</p>"
+      },
+      {
+        "id": "d",
+        "value": "<p>A <code>.d.ts</code> file is an older syntax for defining interfaces, which has been largely replaced by type aliases in modern TypeScript [13, 15].</p>"
+      }
+    ],
+    "correctAnswer": "c",
+    "explanation": "<p>A type declaration file (<code>.d.ts</code>) is primarily used to <b>provide typing information for existing JavaScript code</b> or to define types without implementing any runtime logic [13]. It is explicitly stated that <b>type declarations `can’t define values` but `can declare that there exists a value defined somewhere in your JavaScript` using the `declare` keyword</b> [13]. Unlike regular <code>.ts</code> files, <b><code>.d.ts</code> files `do not generate any code when you compile your application to JavaScript`</b>, making them solely type-level artifacts that help with compile-time checks and tooling [14, 16]." 
+  },
+  {
+    "question": "<p>Why do the sources recommend preferring ES2015 <code>import</code>/<code>export</code> (modules) over TypeScript's <code>namespace</code> keyword for organizing code, especially in large projects?</p>",
+    "answers": [
+      {
+        "id": "a",
+        "value": "<p>Namespaces allow for better dead code elimination and code splitting, while modules are primarily for global variable declarations [17].</p>"
+      },
+      {
+        "id": "b",
+        "value": "<p>Modules always compile to global variables, which is simpler, whereas namespaces require complex build tool configurations [17, 18].</p>"
+      },
+      {
+        "id": "c",
+        "value": "<p>Modules ensure explicit dependencies and better static analysis, which aids in optimizing large frontend projects, and enforce module isolation, unlike namespaces that are automatically merged [17].</p>"
+      },
+      {
+        "id": "d",
+        "value": "<p>Namespaces support dynamic imports more efficiently, while modules have synchronous loading characteristics that hinder performance [17, 19].</p>"
+      }
+    ],
+    "correctAnswer": "c",
+    "explanation": "<p>The sources strongly recommend <b>preferring `regular modules (the import and export kind) over namespaces`</b> because they `stick more closely to JavaScript standards and make your dependencies more explicit` [17]. This has numerous benefits, including <b>`readability`, `enforcing module isolation` (as namespaces are automatically merged, but modules are not)</b>, and crucially, <b>`static analysis`</b>. Static analysis is vital for <b>`big frontend projects where stripping out dead code and splitting your compiled code into multiple files is crucial for performance`</b> [17]. Namespaces, in contrast, `always compile to global variables` and can lead to `collisions` if not carefully managed [18]." 
+  },
+  {
+    "question": "<p>What is a \"generic type parameter\" in TypeScript, and what is its fundamental purpose when defining functions or types like <code>Filter&lt;T&gt;</code>?</p>",
+    "answers": [
+      {
+        "id": "a",
+        "value": "<p>A generic type parameter is a specific type that TypeScript automatically infers for a function, making explicit type annotations unnecessary [20].</p>"
+      },
+      {
+        "id": "b",
+        "value": "<p>It is a <b>placeholder type used to enforce a type-level constraint in multiple places</b>, allowing functions or types to operate on a variety of types while maintaining type safety [20, 21].</p>"
+      },
+      {
+        "id": "c",
+        "value": "<p>A generic type parameter is a special keyword that explicitly marks a function as asynchronous or a class as immutable [20].</p>"
+      },
+      {
+        "id": "d",
+        "value": "<p>It's a way to define a fixed set of permissible values for a type, similar to an enum, but applied to function arguments [20, 22].</p>"
+      }
+    ],
+    "correctAnswer": "b",
+    "explanation": "<p>A <b>\"generic type parameter\"</b> (also known as a polymorphic type parameter or simply a \"generic\") is defined as <b>\"a placeholder type used to enforce a type-level constraint in multiple places\"</b> [20, 21]. Its fundamental purpose is to enable functions, classes, or interfaces to operate on <b>a variety of types in a generalized way</b>, without having to write separate overloads or implementations for each specific type [20, 23]. By using a generic like `T`, TypeScript can <b>infer the specific type from context</b> when the generic is used, and then <b>substitute that type for every occurrence of `T`</b> within its scope, ensuring type safety and code reusability [20, 21]." 
+  }
+]
